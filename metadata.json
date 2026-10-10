@@ -1,0 +1,6 @@
+{
+  "name": "MK Monitor - Audit & Surveillance Web",
+  "description": "Application d'audit automatisé, monitoring d'uptime, suivi SSL/TLS et health check SEO/sécurité pour Matt Konnect.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

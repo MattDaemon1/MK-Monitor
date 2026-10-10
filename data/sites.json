@@ -1,0 +1,13 @@
+[
+  {
+    "id": "site-mattkonnect",
+    "name": "Matt Konnect",
+    "url": "https://mattkonnect.com",
+    "category": "Agence & Production",
+    "expectedStatus": 200,
+    "checkIntervalSeconds": 60,
+    "alertLatencyThresholdMs": 1500,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  }
+]

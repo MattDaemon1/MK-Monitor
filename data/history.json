@@ -1,0 +1,16 @@
+{
+  "site-mattkonnect": [
+    {
+      "timestamp": "2026-10-10T16:34:18.302Z",
+      "responseTimeMs": 2675,
+      "status": "DEGRADED",
+      "statusCode": 200
+    },
+    {
+      "timestamp": "2026-10-10T16:34:19.525Z",
+      "responseTimeMs": 274,
+      "status": "UP",
+      "statusCode": 200
+    }
+  ]
+}
