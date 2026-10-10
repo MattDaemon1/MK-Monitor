@@ -20,9 +20,11 @@ export const TopBar: React.FC<TopBarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
         {/* Zone 1: Wordmark */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm tracking-tight">
-            MK
-          </div>
+          <img
+            src="/logo.png"
+            alt="MK Monitor"
+            className="w-8 h-8 rounded-lg object-contain"
+          />
           <span className="text-base font-semibold tracking-tight text-white whitespace-nowrap">
             MK Monitor
           </span>
