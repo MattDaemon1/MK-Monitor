@@ -302,19 +302,33 @@ class FleetManager {
     };
   }
 
-  public startScheduler(intervalSeconds = 60): void {
+  public startScheduler(tickIntervalSeconds = 60): void {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.checkIntervalSec = intervalSeconds;
-    if (intervalSeconds <= 0) return;
+    this.checkIntervalSec = tickIntervalSeconds;
+    if (tickIntervalSeconds <= 0) return;
 
+    // Checks periodically, respecting each site's configured checkIntervalSeconds (12h/24h)
     this.timer = setInterval(async () => {
+      const now = Date.now();
       const records = Array.from(this.records.values()).filter(r => r.config.enabled);
+
       for (const rec of records) {
-        await this.checkSite(rec.config.id);
+        const lastCheckTime = rec.lastUptime?.timestamp
+          ? new Date(rec.lastUptime.timestamp).getTime()
+          : 0;
+
+        // Default 43200s (12h), enforce minimum 600s (10 min) to avoid excessive queries
+        const targetIntervalSec = rec.config.checkIntervalSeconds || 43200;
+        const intervalMs = Math.max(600, targetIntervalSec) * 1000;
+
+        if (now - lastCheckTime >= intervalMs) {
+          console.log(`[Scheduler] Lancement audit programmé pour ${rec.config.name} (${rec.config.url})`);
+          await this.auditSite(rec.config.id);
+        }
       }
-    }, intervalSeconds * 1000);
+    }, tickIntervalSeconds * 1000);
   }
 
   public stopScheduler(): void {
@@ -332,10 +346,54 @@ class FleetManager {
         url: "https://mattkonnect.com",
         category: "Agence & Production",
         expectedStatus: 200,
-        checkIntervalSeconds: 60,
+        checkIntervalSeconds: 43200,
         alertLatencyThresholdMs: 1500,
         enabled: true,
-        createdAt: new Date().toISOString()
+        createdAt: "2026-01-01T00:00:00.000Z"
+      },
+      {
+        id: "site-ateliermaitrejean.com",
+        name: "Atelier Maîtrejean",
+        url: "https://ateliermaitrejean.com",
+        category: "Artisanat & vente en ligne",
+        expectedStatus: 200,
+        checkIntervalSeconds: 43200,
+        alertLatencyThresholdMs: 1500,
+        enabled: true,
+        createdAt: "2026-01-01T00:00:00.000Z"
+      },
+      {
+        id: "site-devateliermaitrejean.com",
+        name: "Atelier Maîtrejean dev",
+        url: "https://atelier.mattkonnect.com",
+        category: "Artisanat & vente en ligne",
+        expectedStatus: 200,
+        checkIntervalSeconds: 43200,
+        alertLatencyThresholdMs: 1500,
+        enabled: true,
+        createdAt: "2026-01-01T00:00:00.000Z"
+      },
+      {
+        id: "site-gitesologne",
+        name: "Gites Sologne",
+        url: "https://gitesologne.fr",
+        category: "Hébergement",
+        expectedStatus: 200,
+        checkIntervalSeconds: 43200,
+        alertLatencyThresholdMs: 1500,
+        enabled: true,
+        createdAt: "2026-01-01T00:00:00.000Z"
+      },
+      {
+        id: "site-fairway",
+        name: "Fairway",
+        url: "https://fairwayavocats.com",
+        category: "Cabinet avocats",
+        expectedStatus: 200,
+        checkIntervalSeconds: 43200,
+        alertLatencyThresholdMs: 1500,
+        enabled: true,
+        createdAt: "2026-01-01T00:00:00.000Z"
       }
     ];
 
@@ -349,7 +407,6 @@ class FleetManager {
     }
     this.saveSites();
     this.saveHistory();
-    this.auditAll();
   }
 
   public exportCSV(): string {

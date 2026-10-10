@@ -60,12 +60,14 @@ export const SiteDetailModal: React.FC<SiteDetailModalProps> = ({
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-400 mt-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 mt-1">
               <span>{site.config.category || 'Site web'}</span>
               <span aria-hidden="true">·</span>
-              <span>Dernier check : {uptime?.timestamp ? new Date(uptime.timestamp).toLocaleTimeString() : 'Jamais'}</span>
+              <span>Fréquence : <strong className="text-neutral-200">{(site.config.checkIntervalSeconds ?? 43200) >= 3600 ? `${Math.round((site.config.checkIntervalSeconds ?? 43200) / 3600)}h` : `${Math.round((site.config.checkIntervalSeconds ?? 43200) / 60)} min`}</strong></span>
               <span aria-hidden="true">·</span>
-              <span>Uptime 24h : <strong className="font-mono text-emerald-400">{site.uptime24hPercent}%</strong></span>
+              <span>Dernier audit : {uptime?.timestamp ? new Date(uptime.timestamp).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'Jamais'}</span>
+              <span aria-hidden="true">·</span>
+              <span>Uptime : <strong className="font-mono text-emerald-400">{site.uptime24hPercent}%</strong></span>
             </div>
           </div>
 
