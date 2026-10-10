@@ -1,6 +1,6 @@
 import tls from 'tls';
 import { URL } from 'url';
-import { SSLResult } from '../types.js';
+import type { SSLResult } from '../types.ts';
 
 export async function checkSSL(targetUrl: string): Promise<SSLResult> {
   const timestamp = new Date().toISOString();

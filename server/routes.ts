@@ -1,10 +1,81 @@
 import { Router } from 'express';
-import { fleetManager } from './services/fleetManager.js';
+import { fleetManager } from './services/fleetManager.ts';
+import { authService } from './services/authService.ts';
+import { requireAuth } from './middleware/authMiddleware.ts';
 
 export const apiRouter = Router();
 
+// ==================== AUTHENTICATION ROUTES ====================
+// POST /api/auth/login
+apiRouter.post('/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  if (!password) {
+    return res.status(400).json({ success: false, error: 'Mot de passe requis' });
+  }
+
+  const token = authService.authenticate(password, username || 'admin');
+  if (!token) {
+    return res.status(401).json({ success: false, error: 'Identifiant ou mot de passe incorrect' });
+  }
+
+  res.json({
+    success: true,
+    token,
+    user: {
+      username: username || 'admin',
+      role: 'Administrator'
+    }
+  });
+});
+
+// GET /api/auth/me
+apiRouter.get('/auth/me', (req, res) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : undefined;
+
+  if (token && authService.validateToken(token)) {
+    return res.json({
+      success: true,
+      authenticated: true,
+      user: { username: 'admin', role: 'Administrator' }
+    });
+  }
+
+  res.json({ success: true, authenticated: false });
+});
+
+// POST /api/auth/logout
+apiRouter.post('/auth/logout', (req, res) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : undefined;
+  if (token) {
+    authService.revokeToken(token);
+  }
+  res.json({ success: true });
+});
+
+// POST /api/auth/change-password
+apiRouter.post('/auth/change-password', requireAuth, (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ success: false, error: 'Champs obligatoires manquants' });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ success: false, error: 'Le nouveau mot de passe doit comporter au moins 6 caractères' });
+  }
+
+  const success = authService.changePassword(currentPassword, newPassword);
+  if (!success) {
+    return res.status(400).json({ success: false, error: 'Mot de passe actuel incorrect' });
+  }
+
+  res.json({ success: true, message: 'Mot de passe mis à jour avec succès' });
+});
+
+// ==================== FLEET ROUTES ====================
 // GET all sites with latest statuses
-apiRouter.get('/sites', (req, res) => {
+apiRouter.get('/sites', requireAuth, (req, res) => {
   const sites = fleetManager.getAll();
   res.json({
     success: true,
@@ -13,7 +84,7 @@ apiRouter.get('/sites', (req, res) => {
 });
 
 // GET single site
-apiRouter.get('/sites/:id', (req, res) => {
+apiRouter.get('/sites/:id', requireAuth, (req, res) => {
   const site = fleetManager.getById(req.params.id);
   if (!site) {
     return res.status(404).json({ success: false, error: 'Site non trouvé' });
@@ -22,7 +93,7 @@ apiRouter.get('/sites/:id', (req, res) => {
 });
 
 // POST new site
-apiRouter.post('/sites', async (req, res) => {
+apiRouter.post('/sites', requireAuth, async (req, res) => {
   const { name, url, category, checkIntervalSeconds, alertLatencyThresholdMs, expectedStatus } = req.body;
   if (!url) {
     return res.status(400).json({ success: false, error: 'L\'URL du site est obligatoire' });
@@ -44,7 +115,7 @@ apiRouter.post('/sites', async (req, res) => {
 });
 
 // PUT update site
-apiRouter.put('/sites/:id', (req, res) => {
+apiRouter.put('/sites/:id', requireAuth, (req, res) => {
   const updated = fleetManager.updateSite(req.params.id, req.body);
   if (!updated) {
     return res.status(404).json({ success: false, error: 'Site non trouvé' });
@@ -53,7 +124,7 @@ apiRouter.put('/sites/:id', (req, res) => {
 });
 
 // DELETE site
-apiRouter.delete('/sites/:id', (req, res) => {
+apiRouter.delete('/sites/:id', requireAuth, (req, res) => {
   const deleted = fleetManager.deleteSite(req.params.id);
   if (!deleted) {
     return res.status(404).json({ success: false, error: 'Site non trouvé' });
@@ -62,7 +133,7 @@ apiRouter.delete('/sites/:id', (req, res) => {
 });
 
 // Quick probe single site (Uptime + SSL + DNS)
-apiRouter.post('/sites/:id/check', async (req, res) => {
+apiRouter.post('/sites/:id/check', requireAuth, async (req, res) => {
   const record = await fleetManager.checkSite(req.params.id);
   if (!record) {
     return res.status(404).json({ success: false, error: 'Site non trouvé' });
@@ -71,7 +142,7 @@ apiRouter.post('/sites/:id/check', async (req, res) => {
 });
 
 // Deep health audit single site (SEO, Tracking, Security Headers, Links)
-apiRouter.post('/sites/:id/audit', async (req, res) => {
+apiRouter.post('/sites/:id/audit', requireAuth, async (req, res) => {
   const record = await fleetManager.auditSite(req.params.id);
   if (!record) {
     return res.status(404).json({ success: false, error: 'Site non trouvé' });
@@ -80,26 +151,26 @@ apiRouter.post('/sites/:id/audit', async (req, res) => {
 });
 
 // Audit all sites
-apiRouter.post('/sites/audit-all', async (req, res) => {
+apiRouter.post('/sites/audit-all', requireAuth, async (req, res) => {
   // Fire audit in background and return immediate response
   fleetManager.auditAll().catch(err => console.error('Audit all error:', err));
   res.json({ success: true, message: 'Scan global initié en arrière-plan' });
 });
 
 // Reset to default sites
-apiRouter.post('/sites/reset', (req, res) => {
+apiRouter.post('/sites/reset', requireAuth, (req, res) => {
   fleetManager.resetToDefaults();
   res.json({ success: true, message: 'Parc réinitialisé avec les sites de démonstration' });
 });
 
 // Global KPIs
-apiRouter.get('/kpis', (req, res) => {
+apiRouter.get('/kpis', requireAuth, (req, res) => {
   const kpis = fleetManager.getGlobalKPIs();
   res.json({ success: true, data: kpis });
 });
 
 // Export JSON
-apiRouter.get('/export/json', (req, res) => {
+apiRouter.get('/export/json', requireAuth, (req, res) => {
   const sites = fleetManager.getAll();
   const kpis = fleetManager.getGlobalKPIs();
   const exportPayload = {
@@ -114,7 +185,7 @@ apiRouter.get('/export/json', (req, res) => {
 });
 
 // Export CSV
-apiRouter.get('/export/csv', (req, res) => {
+apiRouter.get('/export/csv', requireAuth, (req, res) => {
   const csvContent = fleetManager.exportCSV();
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="mk_monitor_audit_${new Date().toISOString().slice(0, 10)}.csv"`);

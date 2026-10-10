@@ -1,6 +1,6 @@
 import dns from 'dns';
 import { URL } from 'url';
-import { DNSResult } from '../types.js';
+import type { DNSResult } from '../types.ts';
 
 export async function checkDNS(targetUrl: string): Promise<DNSResult> {
   const timestamp = new Date().toISOString();

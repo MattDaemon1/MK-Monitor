@@ -1,7 +1,7 @@
 import http from 'http';
 import https from 'https';
 import { URL } from 'url';
-import { UptimeResult, SiteConfig } from '../types.js';
+import type { UptimeResult, SiteConfig } from '../types.ts';
 
 export async function checkUptime(site: SiteConfig): Promise<UptimeResult> {
   const targetUrl = site.url.trim();

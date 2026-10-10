@@ -15,9 +15,10 @@ import {
 interface ReportsViewProps {
   sites: SiteFleetRecord[];
   kpis: GlobalFleetKPIs | null;
+  token?: string;
 }
 
-export const ReportsView: React.FC<ReportsViewProps> = ({ sites, kpis }) => {
+export const ReportsView: React.FC<ReportsViewProps> = ({ sites, kpis, token }) => {
   const [copied, setCopied] = useState(false);
 
   const expiringSslSites = sites.filter((s) => s.lastSSL && s.lastSSL.status === 'EXPIRING_SOON');
@@ -101,7 +102,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ sites, kpis }) => {
             </p>
           </div>
           <a
-            href="/api/export/json"
+            href={`/api/export/json${token ? `?token=${encodeURIComponent(token)}` : ''}`}
             download
             className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-100 rounded-lg text-xs font-semibold transition-colors border border-neutral-700/80 w-fit"
           >
@@ -122,7 +123,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ sites, kpis }) => {
             </p>
           </div>
           <a
-            href="/api/export/csv"
+            href={`/api/export/csv${token ? `?token=${encodeURIComponent(token)}` : ''}`}
             download
             className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-100 rounded-lg text-xs font-semibold transition-colors border border-neutral-700/80 w-fit"
           >

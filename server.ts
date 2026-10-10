@@ -2,8 +2,8 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
-import { apiRouter } from './server/routes.js';
-import { fleetManager } from './server/services/fleetManager.js';
+import { apiRouter } from './server/routes.ts';
+import { fleetManager } from './server/services/fleetManager.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

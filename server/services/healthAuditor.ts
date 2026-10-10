@@ -2,14 +2,14 @@ import * as cheerio from 'cheerio';
 import http from 'http';
 import https from 'https';
 import { URL } from 'url';
-import {
+import type {
   HealthCheckResult,
   SEOAudit,
   TrackingAudit,
   SecurityHeadersAudit,
   BrokenLinkCheck,
   HeaderCheckItem
-} from '../types.js';
+} from '../types.ts';
 
 // Helper to fetch HTML and response headers with timeout and redirects
 async function fetchPage(targetUrl: string, maxRedirects = 4): Promise<{ html: string; headers: Record<string, string>; finalUrl: string; statusCode: number }> {

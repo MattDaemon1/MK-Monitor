@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {
+import type {
   SiteConfig,
   SiteFleetRecord,
   GlobalFleetKPIs,
   HistoryPoint
-} from '../types.js';
-import { checkUptime } from './uptimeChecker.js';
-import { checkSSL } from './sslChecker.js';
-import { checkDNS } from './dnsChecker.js';
-import { runHealthAudit } from './healthAuditor.js';
+} from '../types.ts';
+import { checkUptime } from './uptimeChecker.ts';
+import { checkSSL } from './sslChecker.ts';
+import { checkDNS } from './dnsChecker.ts';
+import { runHealthAudit } from './healthAuditor.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
