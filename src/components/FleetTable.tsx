@@ -225,6 +225,12 @@ export const FleetTable: React.FC<FleetTableProps> = ({
                               <span className="text-neutral-400">{site.config.category}</span>
                             </>
                           )}
+                          <span aria-hidden="true">·</span>
+                          <span className="text-neutral-400 font-mono" title="Fréquence de scan automatique">
+                            {(site.config.checkIntervalSeconds ?? 43200) >= 3600
+                              ? `${Math.round((site.config.checkIntervalSeconds ?? 43200) / 3600)}h`
+                              : `${Math.round((site.config.checkIntervalSeconds ?? 43200) / 60)}m`}
+                          </span>
                         </div>
                       </div>
                     </td>

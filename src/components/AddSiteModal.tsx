@@ -18,7 +18,7 @@ export const AddSiteModal: React.FC<AddSiteModalProps> = ({
   const [url, setUrl] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Production');
-  const [checkIntervalSeconds, setCheckIntervalSeconds] = useState(60);
+  const [checkIntervalSeconds, setCheckIntervalSeconds] = useState(43200);
   const [alertLatencyThresholdMs, setAlertLatencyThresholdMs] = useState(1500);
   const [expectedStatus, setExpectedStatus] = useState(200);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,14 +29,14 @@ export const AddSiteModal: React.FC<AddSiteModalProps> = ({
       setUrl(initialSite.config.url);
       setName(initialSite.config.name);
       setCategory(initialSite.config.category || 'Production');
-      setCheckIntervalSeconds(initialSite.config.checkIntervalSeconds || 60);
+      setCheckIntervalSeconds(initialSite.config.checkIntervalSeconds || 43200);
       setAlertLatencyThresholdMs(initialSite.config.alertLatencyThresholdMs || 1500);
       setExpectedStatus(initialSite.config.expectedStatus || 200);
     } else {
       setUrl('');
       setName('');
       setCategory('Production');
-      setCheckIntervalSeconds(60);
+      setCheckIntervalSeconds(43200);
       setAlertLatencyThresholdMs(1500);
       setExpectedStatus(200);
     }
@@ -178,10 +178,11 @@ export const AddSiteModal: React.FC<AddSiteModalProps> = ({
                 onChange={(e) => setCheckIntervalSeconds(Number(e.target.value))}
                 className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500/60"
               >
-                <option value={30}>30 secondes</option>
-                <option value={60}>1 minute (Recommandé)</option>
-                <option value={300}>5 minutes</option>
-                <option value={600}>10 minutes</option>
+                <option value={43200}>12 heures (Recommandé)</option>
+                <option value={86400}>24 heures (1 fois / jour)</option>
+                <option value={21600}>6 heures</option>
+                <option value={3600}>1 heure</option>
+                <option value={600}>10 minutes (Minimum)</option>
               </select>
             </div>
 

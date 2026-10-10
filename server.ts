@@ -42,12 +42,15 @@ async function startServer() {
   // Initialize periodic fleet scan (every 60 seconds)
   fleetManager.startScheduler(60);
 
-  // Trigger initial background health scan
+  // Initial check only for sites that have never been audited
   setTimeout(() => {
-    fleetManager.auditAll().catch((err) => {
-      console.error('Initial audit error:', err);
-    });
-  }, 1500);
+    const unAudited = fleetManager.getAll().filter(s => !s.lastUptime && s.config.enabled);
+    for (const site of unAudited) {
+      fleetManager.auditSite(site.config.id).catch((err) => {
+        console.error(`Erreur audit initial pour ${site.config.name}:`, err);
+      });
+    }
+  }, 2000);
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 MK Monitor lancé sur http://localhost:${PORT}`);
