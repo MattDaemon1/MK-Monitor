@@ -5,7 +5,51 @@
     "url": "https://mattkonnect.com",
     "category": "Agence & Production",
     "expectedStatus": 200,
-    "checkIntervalSeconds": 60,
+    "checkIntervalSeconds": 43200,
+    "alertLatencyThresholdMs": 1500,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "site-ateliermaitrejean.com",
+    "name": "Atelier Maîtrejean",
+    "url": "https://ateliermaitrejean.com",
+    "category": "Artisanat & vente en ligne",
+    "expectedStatus": 200,
+    "checkIntervalSeconds": 43200,
+    "alertLatencyThresholdMs": 1500,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+    {
+    "id": "site-devateliermaitrejean.com",
+    "name": "Atelier Maîtrejean dev",
+    "url": "https://atelier.mattkonnect.com",
+    "category": "Artisanat & vente en ligne",
+    "expectedStatus": 200,
+    "checkIntervalSeconds": 43200,
+    "alertLatencyThresholdMs": 1500,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "site-gitesologne",
+    "name": "Gites Sologne",
+    "url": "https://gitesologne.fr",
+    "category": "Hébergement",
+    "expectedStatus": 200,
+    "checkIntervalSeconds": 43200,
+    "alertLatencyThresholdMs": 1500,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "site-fairway",
+    "name": "Fairway",
+    "url": "https://fairwayavocats.com",
+    "category": "Cabinet avocats",
+    "expectedStatus": 200,
+    "checkIntervalSeconds": 43200,
     "alertLatencyThresholdMs": 1500,
     "enabled": true,
     "createdAt": "2026-01-01T00:00:00.000Z"
