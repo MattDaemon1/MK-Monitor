@@ -21,11 +21,7 @@
     "enabled": true,
     "createdAt": "2026-01-01T00:00:00.000Z"
   },
-<<<<<<< HEAD
-    {
-=======
   {
->>>>>>> 77428b5d317a8acfb7e930eebba804bdd1a2de44
     "id": "site-devateliermaitrejean.com",
     "name": "Atelier Maîtrejean dev",
     "url": "https://atelier.mattkonnect.com",

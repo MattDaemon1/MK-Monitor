@@ -48,7 +48,7 @@ class AuthService {
     }
 
     // Default credentials: admin / mattkonnect2026 (or env variable)
-    const defaultPassword = process.env.ADMIN_PASSWORD || 'mattkonnect2026';
+    const defaultPassword = process.env.ADMIN_PASSWORD || 'Maboule35!';
     const salt = crypto.randomBytes(16).toString('hex');
     const passwordHash = this.hashPassword(defaultPassword, salt);
 

@@ -52,12 +52,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
     }
   };
 
-  const handleUseDefaultCredentials = () => {
-    setUsername('admin');
-    setPassword('mattkonnect2026');
-    setError(null);
-  };
-
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans selection:bg-emerald-500/20 selection:text-emerald-300">
       {/* Background ambient lighting */}
@@ -149,7 +143,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             </div>
 
             {/* Remember Me */}
-            <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center justify-start pt-1">
               <label className="flex items-center gap-2 cursor-pointer text-neutral-400 hover:text-neutral-300 select-none">
                 <input
                   type="checkbox"
@@ -159,14 +153,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                 />
                 <span>Se souvenir de moi</span>
               </label>
-
-              <button
-                type="button"
-                onClick={handleUseDefaultCredentials}
-                className="text-[11px] text-emerald-400/90 hover:text-emerald-300 underline underline-offset-2"
-              >
-                Remplir identifiants démo
-              </button>
             </div>
 
             {/* Submit button */}

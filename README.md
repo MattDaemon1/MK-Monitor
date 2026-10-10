@@ -83,8 +83,8 @@ Ouvrez votre navigateur sur : **`http://localhost:3000`**
 
 ### Authentification & Sécurité d'accès
 Un écran de connexion protège le tableau de bord et les routes d'API :
-- **Identifiant par défaut** : `admin`
-- **Mot de passe par défaut** : `mattkonnect2026`
+- **Identifiant** : `admin`
+- **Mot de passe** : `Maboule35!`
 - **Sécurité** : Chiffrement Scrypt avec salt aléatoire (stocké localement dans `data/auth.json`), jetons de session sécurisés avec Bearer auth, et possibilité de modifier le mot de passe à tout moment depuis l'interface ou via la variable d'environnement `ADMIN_PASSWORD`.
 
 ---
